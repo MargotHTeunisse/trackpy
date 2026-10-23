@@ -13,6 +13,8 @@ from trackpy.refine.least_squares import (dimer, trimer, tetramer, dimer_global,
 from trackpy.tests.common import assert_coordinates_close, StrictTestCase
 import warnings
 
+from abc import ABC
+
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
     try:
@@ -36,7 +38,7 @@ SIZE_3D = 4.
 SIZE_2D_ANISOTROPIC = (5., 3.)
 SIZE_3D_ANISOTROPIC = (3., 5., 5.)
 
-class RefineTsts:
+class AbstractShapeTestFit(ABC):
     skip = False
     dtype = np.uint8
     signal = SIGNAL
@@ -687,35 +689,35 @@ class RefineTsts:
         self.assertLess(devs['pos'], self.precision_perfect)
 
 
-class TestFit_gauss2D(RefineTsts, StrictTestCase):
+class TestFit_gauss2D(AbstractShapeTestFit, StrictTestCase):
     size = SIZE_2D
     ndim = 2
     feat_func = 'gauss'
     fit_func = 'gauss'
 
 
-# class TestFit_gauss2D_a(RefineTsts, StrictTestCase):
+# class TestFit_gauss2D_a(AbstractShapeTestFit, StrictTestCase):
 #      size = SIZE_2D_ANISOTROPIC
 #      ndim = 2
 #      feat_func = 'gauss'
 #      fit_func = 'gauss'
 
 
-class TestFit_gauss3D(RefineTsts, StrictTestCase):
+class TestFit_gauss3D(AbstractShapeTestFit, StrictTestCase):
      size = SIZE_3D
      ndim = 3
      feat_func = 'gauss'
      fit_func = 'gauss'
 
 
-class TestFit_gauss3D_a(RefineTsts, StrictTestCase):
+class TestFit_gauss3D_a(AbstractShapeTestFit, StrictTestCase):
      size = SIZE_3D_ANISOTROPIC
      ndim = 3
      feat_func = 'gauss'
      fit_func = 'gauss'
 
 
-class TestFit_disc2D(RefineTsts, StrictTestCase):
+class TestFit_disc2D(AbstractShapeTestFit, StrictTestCase):
     size = SIZE_2D
     ndim = 2
     feat_func = 'disc'
@@ -751,7 +753,7 @@ class TestFit_disc2D(RefineTsts, StrictTestCase):
 #     fit_func = 'disc'
 
 
-class TestFit_ring2D(RefineTsts, StrictTestCase):
+class TestFit_ring2D(AbstractShapeTestFit, StrictTestCase):
     size = SIZE_2D
     ndim = 2
     feat_func = 'ring'
@@ -764,7 +766,7 @@ class TestFit_ring2D(RefineTsts, StrictTestCase):
     size_dev = 0.05  #  5% of feature size
 
 
-# class TestFit_ring2D_a(RefineTsts, StrictTestCase):
+# class TestFit_ring2D_a(AbstractShapeTestFit, StrictTestCase):
 #     size = SIZE_2D_ANISOTROPIC
 #     ndim = 2
 #     feat_func = 'ring'
@@ -777,7 +779,7 @@ class TestFit_ring2D(RefineTsts, StrictTestCase):
 #     size_dev = 0.05  #  5% of feature size
 #
 #
-# class TestFit_ring3D(RefineTsts, StrictTestCase):
+# class TestFit_ring3D(AbstractShapeTestFit, StrictTestCase):
 #     size = SIZE_3D
 #     ndim = 3
 #     feat_func = 'ring'
@@ -790,7 +792,7 @@ class TestFit_ring2D(RefineTsts, StrictTestCase):
 #     size_dev = 0.05  #  5% of feature size
 #
 #
-# class TestFit_ring3D_a(RefineTsts, StrictTestCase):
+# class TestFit_ring3D_a(AbstractShapeTestFit, StrictTestCase):
 #     size = SIZE_3D_ANISOTROPIC
 #     ndim = 3
 #     feat_func = 'ring'
