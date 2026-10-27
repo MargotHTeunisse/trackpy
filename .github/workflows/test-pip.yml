@@ -13,16 +13,23 @@ jobs:
           - python: "3.9"
             display_name: "2020"
             deps: "numpy==1.19.*"
+            dependency-groups: "test,fast"
           - python: "3.10"
             display_name: "2021ish"
+            dependency-groups: "test,fast"
           - python: "3.11"
             display_name: "2022"
+            dependency-groups:  "test,fast"
+            extras: "fast"
           - python: "3.12"
             display_name: "2023"
+            dependency-groups:  "test,fast"
           - python: "3.13"
             display_name: "2024"
+            dependency-groups:  "test,fast"
           - python: "3.13"
             display_name: "latest (no numba)"
+            dependency-groups: "test"
 
 
     steps:
@@ -40,7 +47,7 @@ jobs:
         shell: bash
         run: |
           pip install --disable-pip-version-check --upgrade pip setuptools wheel
-          pip install -v -e .[test] ${{ matrix.deps }};
+          pip install -v -e .[${{matrix.dependency-groups}}] ${{ matrix.deps }};
           pip list
 
       - name: Run tests
