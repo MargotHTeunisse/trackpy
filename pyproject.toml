@@ -9,6 +9,9 @@ dependencies = ["numpy >= 1.19", "scipy >= 1.5", "pandas >= 1.1",
     "tables >= 3.6", "scikit-learn >= 0.24", "numba >= 0.53", "llvmlite >= 0.36"]
 dynamic = ["version"]
 
+[project.optional-dependencies]
+test = ["pytest"]
+
 [build]
 requires = ["uv-build >= 0.13.6", "<= 0.14.0"]
 build-backend = ["uv-build"]
