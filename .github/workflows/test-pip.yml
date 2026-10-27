@@ -12,6 +12,7 @@ jobs:
         include:
           - python: "3.9"
             display_name: "2020"
+            deps: "numpy==1.19.*"
           - python: "3.10"
             display_name: "2021ish"
           - python: "3.11"
