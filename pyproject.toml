@@ -1,0 +1,11 @@
+[project]
+name = "trackpy"
+authors = [{name="Casper van de Wel"},{name="Daniel Allan"},
+    {name="Nathan Keim"}, {name="Thomas Caswell"}]
+requires-python = ">= 3.9"
+readme = "README.md"
+license = "BSD-3-Clause"
+
+[build]
+requires = ["uv-build >= 0.13.6", "<= 0.14.0"]
+build-backend = ["uv-build"]
