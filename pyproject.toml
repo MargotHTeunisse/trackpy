@@ -13,5 +13,5 @@ test = ["pytest"]
 fast = ["numba >= 0.53"]
 
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools", "versioneer[toml]"]
 build-backend = "setuptools.build_meta"
