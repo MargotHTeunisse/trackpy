@@ -46,7 +46,7 @@ jobs:
       - name: Install python dependencies
         shell: bash
         run: |
-          pip install --disable-pip-version-check --upgrade pip setuptools wheel
+          pip install --disable-pip-version-check --upgrade pip
           pip install -v -e .[${{matrix.dependency-groups}}] ${{ matrix.deps }};
           pip list
 

@@ -12,6 +12,6 @@ dynamic = ["version", "authors", "description", "classifiers", "urls"]
 test = ["pytest"]
 fast = ["numba >= 0.53"]
 
-[build]
-requires = ["uv-build >= 0.13.6", "<= 0.14.0"]
-build-backend = ["uv-build"]
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
