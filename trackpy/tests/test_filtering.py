@@ -61,15 +61,22 @@ class TestFilterClusters:
         with pytest.raises(ValueError) as e:
             filter_clusters(tracks)
 
-    def test_removes_single_frame_particles_with_size_in_66th_percentile(self):
+    @pytest.mark.parametrize("sizes,expected", [
+        ([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], [0, 1, 2, 3, 4, 5]),
+        ([5, 2, 4, 1, 7, 10, 8, 3, 4, 9], [0, 1, 2, 3, 7, 8]),
+        ([1, 1, 1, 4, 6, 10, 11, 15, 100, 1000], [0, 1, 2, 3, 4, 5]),
+        ([1, 1, 1, 1, 1, 1, 1, 1, 1, 1000], [])
+
+    ])
+    def test_removes_single_frame_particles_with_size_in_66th_percentile(self, sizes:list[int], expected:list[int]):
         tracks = DataFrame.from_records([{'particle':particle, 'size':size, 'frame':0}
-                                         for particle, size in zip(range(10), [1, 1, 1, 4, 6, 10, 11, 15, 100, 1000])])
+                                         for particle, size in zip(range(10), sizes)])
 
         filtered_tracks:DataFrame = filter_clusters(tracks, quantile=0.66)
 
         remaining_particles:list[int] = [int(particle)
                                          for particle in filtered_tracks['particle'].unique()]
-        assert remaining_particles == [0, 1, 2, 3, 4, 5]
+        assert remaining_particles == expected
 
     def test_removes_single_frame_particles_with_size_above_threshold(self):
         tracks = DataFrame.from_records([{'particle':particle, 'size':size, 'frame':0}
