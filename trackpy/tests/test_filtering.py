@@ -87,3 +87,17 @@ class TestFilterClusters:
         remaining_particles:list[int] = [int(particle)
                                          for particle in filtered_tracks['particle'].unique()]
         assert remaining_particles == [0, 1, 3, 6, 7, 8, 9]
+
+    def test_removes_particle_with_mean_size_above_threshold(self):
+        small_particle_sizes: list[int] = [10-i for i in range(9)]
+        large_particle_sizes: list[int] = [7+i for i in range(9)]
+        sizes = small_particle_sizes + large_particle_sizes
+        tracks = DataFrame({'particle': [0]*9 + [1]*9,
+                            'frame': list(range(9))+list(range(9)),
+                            'size': sizes})
+
+        filtered_tracks = filter_clusters(tracks, threshold=10)
+
+        remaining_particles:list[int] = [int(particle)
+                                         for particle in filtered_tracks['particle'].unique()]
+        assert remaining_particles == [0]
