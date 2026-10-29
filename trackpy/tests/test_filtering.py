@@ -5,6 +5,19 @@ from trackpy import filter_stubs
 import pytest
 
 class TestFilterStubs:
+    def test_cannot_filter_stubs_if_frame_col_is_missing(self):
+        tracks = DataFrame({'particle':[]})
+
+        with pytest.raises(ValueError) as e:
+            filter_stubs(tracks)
+
+    def test_cannot_filter_stubs_if_particle_col_is_missing(self):
+        tracks = DataFrame({'frame':[]})
+
+        with pytest.raises(ValueError) as e:
+            filter_stubs(tracks)
+
+
     @pytest.mark.parametrize("frame_threshold,expected", [
         (1, [0, 1, 2, 3, 4, 5, 6]),
         (2, [0, 1, 2, 3, 4, 5, 6]),
