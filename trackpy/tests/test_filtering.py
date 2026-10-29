@@ -1,17 +1,17 @@
 from pandas import DataFrame
 
-from trackpy import filter_stubs
+from trackpy import filter_stubs, filter_clusters
 
 import pytest
 
 class TestFilterStubs:
-    def test_cannot_filter_stubs_if_frame_col_is_missing(self):
+    def test_cannot_filter_stubs_with_only_particle_col(self):
         tracks = DataFrame({'particle':[]})
 
         with pytest.raises(ValueError) as e:
             filter_stubs(tracks)
 
-    def test_cannot_filter_stubs_if_particle_col_is_missing(self):
+    def test_cannot_filter_stubs_with_only_frame_col(self):
         tracks = DataFrame({'frame':[]})
 
         with pytest.raises(ValueError) as e:
@@ -41,3 +41,32 @@ class TestFilterStubs:
         remaining_particles:list[int] = [int(particle) 
                                          for particle in filtered_tracks['particle'].unique()]
         assert remaining_particles == expected
+
+class TestFilterClusters:
+    def test_cannot_filter_clusters_if_frame_col_is_missing(self):
+        tracks = DataFrame({'size': [], 'particle':[]})
+
+        with pytest.raises(ValueError) as e:
+            filter_clusters(tracks)
+
+    def test_cannot_filter_clusters_if_size_col_is_missing(self):
+        tracks = DataFrame({'particle': [], 'frame':[]})
+
+        with pytest.raises(ValueError) as e:
+            filter_clusters(tracks)
+
+    def test_cannot_filter_clusters_if_particle_col_is_missing(self):
+        tracks = DataFrame({'size': [], 'frame':[]})
+
+        with pytest.raises(ValueError) as e:
+            filter_clusters(tracks)
+
+    def test_removes_particles_with_size_in_66th_percentile(self):
+        tracks = DataFrame.from_records([{'particle':particle, 'size':particle, 'frame':0}
+                                         for particle in range(1, 11)])
+
+        filtered_tracks:DataFrame = filter_clusters(tracks, 0.66)
+
+        remaining_particles:list[int] = [int(particle)
+                                         for particle in filtered_tracks['particle'].unique()]
+        assert remaining_particles == [1, 2, 3, 4, 5, 6]
