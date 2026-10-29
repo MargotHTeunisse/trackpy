@@ -61,12 +61,22 @@ class TestFilterClusters:
         with pytest.raises(ValueError) as e:
             filter_clusters(tracks)
 
-    def test_removes_particles_with_size_in_66th_percentile(self):
-        tracks = DataFrame.from_records([{'particle':particle, 'size':particle, 'frame':0}
-                                         for particle in range(1, 11)])
+    def test_removes_single_frame_particles_with_size_in_66th_percentile(self):
+        tracks = DataFrame.from_records([{'particle':particle, 'size':size, 'frame':0}
+                                         for particle, size in zip(range(10), [1, 1, 1, 4, 6, 10, 11, 15, 100, 1000])])
 
-        filtered_tracks:DataFrame = filter_clusters(tracks, 0.66)
+        filtered_tracks:DataFrame = filter_clusters(tracks, quantile=0.66)
 
         remaining_particles:list[int] = [int(particle)
                                          for particle in filtered_tracks['particle'].unique()]
-        assert remaining_particles == [1, 2, 3, 4, 5, 6]
+        assert remaining_particles == [0, 1, 2, 3, 4, 5]
+
+    def test_removes_single_frame_particles_with_size_above_threshold(self):
+        tracks = DataFrame.from_records([{'particle':particle, 'size':size, 'frame':0}
+                for particle, size in zip(range(10), [1, 1, 100, 1, 1000, 20, 1, 1, 5, 1])])
+
+        filtered_tracks:DataFrame = filter_clusters(tracks, threshold=10)
+
+        remaining_particles:list[int] = [int(particle)
+                                         for particle in filtered_tracks['particle'].unique()]
+        assert remaining_particles == [0, 1, 3, 6, 7, 8, 9]
